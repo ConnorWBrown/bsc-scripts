@@ -10,6 +10,7 @@ Idea is to combine and simplify:
     - totality of modifications that ever need to be made by CO Matrons and Patrons are just in the top section
     - get rid of excessive printing
     - eventually print errors to the csv file?
+    - ideally, all versions managed via GitHub.
 """
 
 RMSlistname = 'RMSfulllist.csv'
