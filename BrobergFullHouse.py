@@ -151,9 +151,9 @@ class FullHouse(object):
             #keys for here are the different semester names, keys for this dictionary are row numbers from input list
             cntlis={'1':0,'2':0,'12':0}
             for i in Pretmpinitial.keys():
-                flaglis={'1':0,'2':0,'house_p1':None,'house_p2':None,'diff_places_flag':False}
+                flaglis={'1':0,'2':0,'house_p1':None,'house_p2':None,'diff_places_flag':False} #differs from earlier version
                 for j in Pretmpinitial[i]:
-                    if 'Summer Period 1' in j['Term']:
+                    if 'Summer Period 1' in j['Term']:  # if you move in before period 2 starts then considered period 1
                         flaglis['1']+=1
                         if not flaglis['house_p1']:
                             flaglis['house_p1'] = j
@@ -287,7 +287,7 @@ class FullHouse(object):
                                                   ' ('+str(tmpnoms)+') Just using one of them...')
                         else:
                             self.errorlist.append('found more than 1 entry for '+str(j)+
-                                                  ' at '+str(tmpnoms[0])+'. Only using one unintelligently '
+                                                  ' at '+str(tmpnoms[0])+'. Only using one unintelligently '+
                                                                          'since trying to avoid use of Move Out data..')
                     vals=tmpkeepers[0][1]
                 else:
@@ -473,14 +473,14 @@ class FullHouse(object):
                     finaldict[i]['Per2vacs']=int(houseinfo[abbrv]['cap'])-int(finaldict[i]['Per2currcap'])
                     if finaldict[i]['Per1vacs']<0:
                         self.errorlist.append(str(i)+' has '+str(-finaldict[i]['Per1vacs'])+
-                                            ' more people than it should have in Period 1. '
+                                            ' more people than it should have in Period 1. '+
                                             'Check the capacity assignments at top of script')
                     elif finaldict[i]['Per1vacs']>0:
                         self.outputcommentlist.append('Found '+str(finaldict[i]['Per1vacs'])+
                                                       ' vacancies at '+str(i)+' in Period 1')
                     if finaldict[i]['Per2vacs']<0:
                         self.errorlist.append(str(i)+' has '+str(-finaldict[i]['Per2vacs'])+
-                                              ' more people than it should have in Period 2.'
+                                              ' more people than it should have in Period 2.'+
                                               ' Check the capacity assignments at top of Broberg HL script')
                     elif finaldict[i]['Per2vacs']>0:
                         self.outputcommentlist.append('Found '+str(finaldict[i]['Per2vacs'])+
@@ -561,8 +561,8 @@ class FullHouse(object):
                     if (cnt > houseinfo[abbrv]['cap']) and ((vac_cntr[1]['m'] and vac_cntr[2]['f'])
                                                             or (vac_cntr[1]['f'] and vac_cntr[2]['m'])):
                         self.outputcommentlist.append(str(abbrv)+
-                                                      ' house had an inbalance of genders between periods.'
-                                                      ' Mixed some gendered rooms in order to avoid increasing '
+                                                      ' house had an inbalance of genders between periods.'+
+                                                      ' Mixed some gendered rooms in order to avoid increasing '+
                                                       'house capacities...')
                         while (cnt > houseinfo[abbrv]['cap']):
                             tmpgendervacs = {1:{'m':[],'f':[]},2:{'m':[],'f':[]}} #for storing room nums
@@ -946,8 +946,8 @@ class FullHouse(object):
                                             for u in k:
                                                 tmp.append(u)
                                 else: #THIS is weird case where there aren't the same number of people in period 2 who are sharing...
-                                    self.errorlist.append('FATAL ERROR - detected decrease in '
-                                                          'number of people involved in shared rooms at HIP house'
+                                    self.errorlist.append('FATAL ERROR - detected decrease in '+
+                                                          'number of people involved in shared rooms at HIP house'+
                                                           ' from period 1 to period 2. Script breaks when this happens')
                                     sharedp1size = len(self.initialdict[perkey][i]['lgs']['SHAREDROOM'])
                                     sharedp2size = len(self.initialdict[mult_listP2][i]['lgs']['SHAREDROOM'])
@@ -1487,6 +1487,12 @@ class FullHouse(object):
                 write = csv.writer(myfile, lineterminator="\n")
                 write.writerows(finaloutput)
         else:
+            # specific to CBrown's system
+            # if you would like help saving output files more easily, contact connorwbrown@berkeley.edu
+            # after the C:\, input the directory in which you've saved InitialFile, followed by \\
+            # if os.path.isfile('C:\Users\conno\Desktop\BSC_Scripts\Outputs\\' + str(exptlist)):
+            # exptlist = exptlist + datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            # with open('C:\Users\conno\Desktop\BSC_Scripts\Outputs\\' + str(exptlist), 'w') as myfile:
             with open(str(exptlist),'w') as myfile:
                 write = csv.writer(myfile, lineterminator="\n")
                 write.writerows(finaloutput)
@@ -1506,8 +1512,10 @@ class FullHouse(object):
 
 #s = FullHouse(in_nom='Fall2016/RMSfulllist.csv',COrun=False)
 #s = FullHouse(in_nom='Summer2016/RMSfulllistSum.csv',COrun=False)
-#s = FullHouse(in_nom='RMSfulllistSum1.csv',COrun=False)
-s = FullHouse(in_nom=RMSlistname,COrun=False)
+#s = FullHouse(in_nom='C:\\Users\\conno\\Desktop\\BSC_Scripts\\Inputs\\' + RMSlistname, COrun=False)
+#contact Connor for file saving help
+#s = FullHouse(in_nom=RMSlistname,COrun=False)
+s = FullHouse(in_nom='RMSfulllist.csv', COrun=True)
 s.loadfile()
 s.parsefile()
 s.getfinaldict()
